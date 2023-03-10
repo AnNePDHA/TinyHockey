@@ -145,6 +145,9 @@ void AirHockey::execute_item(Item type, piece& puck) {
 			puck.xs *= 0.5;
 			puck.ys *= 0.5;
 			break;
+		case stop:
+			puck.xs = 0;
+			puck.ys = 0;
 		default:
 			break;
 	}
@@ -266,7 +269,7 @@ void AirHockey::spawn_item() {
 			int minY = 5;
 			int maxY = HEIGHT - SIZE_ITEM - 5;
 			int minScore = 1;
-			int maxScore = 2;
+			int maxScore = 3;
 			_pieces[3].score = rand() % (maxScore - minScore + 1) + minScore;
 			_pieces[3].x = rand() % (maxX - minX + 1) + minX;
 			_pieces[3].y = rand() % (maxY - minY + 1) + minY;

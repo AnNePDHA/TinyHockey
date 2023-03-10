@@ -268,8 +268,11 @@ void GUI_SDL::getItemTexture(const piece& item) {
 		case slowDown:
 			_item = IMG_LoadTexture(_rend, "res/item/item_ice.png");
 			break;
+		case stop:
+			_item = IMG_LoadTexture(_rend, "res/item/item_stop.png");
+			break;
 		default:
-			_item = IMG_LoadTexture(_rend, "res/item_ice.png");
+			_item = IMG_LoadTexture(_rend, "res/item_stop.png");
 			break;
 
 	}

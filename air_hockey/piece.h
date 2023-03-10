@@ -27,7 +27,8 @@ enum Event_en
 
 enum Item {
 	speedUp = 1,
-	slowDown = 2
+	slowDown = 2,
+	stop = 3
 };
 
 struct piece
