@@ -4,19 +4,25 @@ using namespace std;
 
 AirHockey::AirHockey() : _lib(new GUI_SDL)
 {
-	_pieces.resize(3); // 0 - bot, 1 - player, 2 - puck
+	_pieces.resize(4); // 0 - bot, 1 - player, 2 - puck, 3 - item
 }
 
 AirHockey::~AirHockey() { }
 
 void AirHockey::begin_pos()
 {
+	//cout << _hard;
 	double hei = (HEIGHT - SIZE_BAT) / 2;
 	double wid = (WIDTH - SIZE_BAT) / 2;
 
 	_pieces[0] = { _pieces[0].score, wid, hei / 2, wid, hei / 2, 0, 0 };
 	_pieces[1] = { _pieces[1].score, wid, hei + hei / 2, wid, hei + hei / 2, 0, 0 };
 	_pieces[2] = { 0, wid + 2, hei, wid + 2, hei, 0, 0 };
+	_pieces[3] = { 0, 0, 0, 0, 0, 0, 0 };
+
+	extrudeCount = 0;
+	_startItemTime = SDL_GetTicks();
+	_coolDownTime = SDL_GetTicks();
 
 }
 
@@ -68,6 +74,7 @@ void AirHockey::behav_puck()
 {
 	piece& puck = _pieces[tpuck];
 
+
 	int wid = WIDTH - SIZE_PUCK - 2, hei = HEIGHT - SIZE_PUCK - 2;
 
 	puck.x += puck.xs;
@@ -75,6 +82,8 @@ void AirHockey::behav_puck()
 
 	hit_puck(tplayer);
 	hit_puck(tbot);
+	
+	behav_item(puck);
 
 	//boards
 	if (puck.x > wid || puck.x < 2)
@@ -110,6 +119,34 @@ void AirHockey::behav_puck()
 	{
 		puck.xs = 0;
 		puck.ys = 0;
+	}
+}
+
+void AirHockey::behav_item(piece& puck) {
+	piece& item = _pieces[titem];
+	if (item.score == 0) {
+		return;
+	}
+	if (pow(SIZE_PUCK, 2) >= pow(item.x - puck.x, 2) + pow(item.y - puck.y, 2)) {
+		execute_item((Item)(item.score), puck);
+		item.score = 0;
+		_coolDownTime = SDL_GetTicks();
+	}
+
+}
+
+void AirHockey::execute_item(Item type, piece& puck) {
+	switch (type) {
+		case speedUp:
+			puck.xs *= 2;
+			puck.ys *= 2;
+			break;
+		case slowDown:
+			puck.xs *= 0.5;
+			puck.ys *= 0.5;
+			break;
+		default:
+			break;
 	}
 }
 
@@ -214,10 +251,41 @@ void AirHockey::behav_bot()
 	confines(tbot);
 }
 
+void AirHockey::spawn_item() {
+	if (_pieces[3].score == 0 && SDL_GetTicks() - _coolDownTime < 1000) {
+		//cout << "CD" << endl;
+		return;
+	}
+	else if(_pieces[3].score == 0){
+		//cout << "Check rand" << endl;
+		double val = (double)rand() / RAND_MAX;
+		if (val < 0.25) {
+			//cout << "Check rand2" << endl;
+			int minX = 5;
+			int maxX = WIDTH - SIZE_ITEM - 5;
+			int minY = 5;
+			int maxY = HEIGHT - SIZE_ITEM - 5;
+			int minScore = 1;
+			int maxScore = 2;
+			_pieces[3].score = rand() % (maxScore - minScore + 1) + minScore;
+			_pieces[3].x = rand() % (maxX - minX + 1) + minX;
+			_pieces[3].y = rand() % (maxY - minY + 1) + minY;
+			_startItemTime = SDL_GetTicks();
+		}
+		else {
+			_coolDownTime = SDL_GetTicks();
+		}
+	}
+	else if (_pieces[3].score != 0 && SDL_GetTicks() - _startItemTime > 5000) {
+			//cout << "Start CD" << endl;
+			_pieces[3].score = 0;
+			_coolDownTime = SDL_GetTicks();
+	}
+}
+
 void AirHockey::start()
 {
 	_lib->new_game(_hard);
-	extrudeCount = 0;
 	while (true)
 	{
 		_event = _lib->checkEvent(_pieces[1]);
@@ -258,6 +326,7 @@ void AirHockey::start()
 		}
 		if (_play)
 		{
+			spawn_item();
 			behav_bot();
 			confines(tplayer);
 			behav_puck();

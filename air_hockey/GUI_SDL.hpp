@@ -13,6 +13,7 @@
 #define SIZE_PIECE 542
 #define SIZE_BAT 50
 #define SIZE_PUCK 45
+#define SIZE_ITEM 90
 #define BLACK_COLOR 0,0,0
 #define RED_COLOR 255,0,0
 #define BLUE_COLOR 0,0,255
@@ -30,6 +31,8 @@ public:
 	void draw(const std::vector<piece> & pieces);
 	bool change_noise();
 	void play_sound(Collision s);
+	void getItemTexture(const piece& item);
+	void set_itemType(Item type);
 
 private:
 	
@@ -37,12 +40,13 @@ private:
 	void load_img();
 	void load_sound();
 	void draw_dynamic();
+	void draw_item(const piece& item);
 
 	bool _noise = true;
 	SDL_Window *_win;
 	SDL_Renderer *_rend;
 	SDL_Surface *_ttf;
-	SDL_Texture *_background, *_bat, *_puck, *_text, *_dynamic;
+	SDL_Texture *_background, *_bat, *_puck, *_text, *_dynamic, *_item;
 	TTF_Font *_font;
 	SDL_Color _color;
 	SDL_Rect _src, _dst;

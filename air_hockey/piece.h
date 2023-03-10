@@ -4,7 +4,8 @@ enum type_piece
 {
 	tbot,
 	tplayer,
-	tpuck
+	tpuck,
+	titem
 };
 
 enum Collision
@@ -22,6 +23,11 @@ enum Event_en
 	dific,
 	mus,
 	menu
+};
+
+enum Item {
+	speedUp = 1,
+	slowDown = 2
 };
 
 struct piece

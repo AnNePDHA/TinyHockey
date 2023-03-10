@@ -198,6 +198,7 @@ void GUI_SDL::draw(const std::vector<piece> & pieces)
 	_dst.y = pieces[1].y;
 	SDL_RenderCopy(_rend, _bat, &_src, &_dst);
 
+	draw_item(pieces[3]);
 	draw_dynamic();
 	SDL_RenderPresent(_rend);
 }
@@ -238,6 +239,43 @@ bool GUI_SDL::change_noise()
 	return _noise;
 }
 
+void GUI_SDL::draw_item(const piece& item) {
+	if (item.score == 0) {
+		SDL_DestroyTexture(_item);
+		return;
+	}
+
+	getItemTexture(item);
+	if (!_item)
+	{
+		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
+		exit(2);
+	}
+	_dst.h = _dst.w = SIZE_ITEM;
+	_dst.x = item.x;
+	_dst.y = item.y;
+	SDL_RenderCopy(_rend, _item, &_src, &_dst);
+	//SDL_DestroyTexture(_item);
+	//SDL_RenderPresent(_rend);
+}
+
+void GUI_SDL::getItemTexture(const piece& item) {
+	Item type = (Item)(item.score);
+	switch (type) {
+		case speedUp:
+			_item = IMG_LoadTexture(_rend, "res/item/item_lightning.png");
+			break;
+		case slowDown:
+			_item = IMG_LoadTexture(_rend, "res/item/item_ice.png");
+			break;
+		default:
+			_item = IMG_LoadTexture(_rend, "res/item_ice.png");
+			break;
+
+	}
+}
+
+
 void GUI_SDL::draw_dynamic()
 {
 	_dynamic = IMG_LoadTexture(_rend, (_noise ? "res/on.png" : "res/mute.png"));
@@ -274,6 +312,7 @@ GUI_SDL::~GUI_SDL()
 	SDL_DestroyTexture(_bat);
 	SDL_DestroyTexture(_dynamic);
 	SDL_DestroyTexture(_text);
+	SDL_DestroyTexture(_item);
 	TTF_CloseFont(_font);
 	Mix_FreeMusic(_music);
 	Mix_FreeChunk(_board);
