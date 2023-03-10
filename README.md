@@ -1,7 +1,7 @@
-# Air hockey
-### The C++ project with SDL library of Microsoft Visual Studio.
+### SPACE HOCKEY
+### The C++ project with SDL2 library of Microsoft Visual Studio.
 #### What to do to run the project:
-1) Clone the repository to you OS directory (for example 'C:\projects\air_hockey').
+1) Clone the repository.
 2) Download SDL library and its components (Development Libraries) unzip and merge into one directory. For example 'C:\SDL2':
    * [SDL2](https://www.libsdl.org/download-2.0.php)
    * [SDL image](https://www.libsdl.org/projects/SDL_image/)
@@ -32,5 +32,3 @@
 - control the bit-player - move the mouse
 
 ### Sample
-
-![](https://github.com/vgladush/resources/blob/master/img/air_hockey.gif)
