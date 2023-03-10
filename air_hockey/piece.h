@@ -12,7 +12,8 @@ enum Collision
 {
 	board,
 	hit,
-	goal
+	goal,
+	item
 };
 
 enum Event_en
@@ -26,9 +27,12 @@ enum Event_en
 };
 
 enum Item {
+	none = 0,
 	speedUp = 1,
 	slowDown = 2,
-	stop = 3
+	stop = 3,
+	invisible = 4,
+	turn = 5
 };
 
 struct piece

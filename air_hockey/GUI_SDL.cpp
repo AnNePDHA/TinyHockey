@@ -101,6 +101,12 @@ void GUI_SDL::load_sound()
 		std::cerr << "MIX error: " << Mix_GetError() << std::endl;
 		exit(4);
 	}
+	_buff = Mix_LoadWAV("res/Item.mp3");
+	if (!_buff)
+	{
+		std::cerr << "MIX error: " << Mix_GetError() << std::endl;
+		exit(4);
+	}
 	Mix_PlayMusic(_music, -1);
 }
 
@@ -271,10 +277,48 @@ void GUI_SDL::getItemTexture(const piece& item) {
 		case stop:
 			_item = IMG_LoadTexture(_rend, "res/item/item_stop.png");
 			break;
-		default:
-			_item = IMG_LoadTexture(_rend, "res/item_stop.png");
+		case invisible:
+			_item = IMG_LoadTexture(_rend, "res/item/item_invisible.png");
 			break;
+		case turn:
+			_item = IMG_LoadTexture(_rend, "res/item/item_turn.png");
+			break;
+		default:
+			_item = IMG_LoadTexture(_rend, "res/item/item_stop.png");
+			break;
+	}
+}
 
+void GUI_SDL::executeEffect(Item type, const piece& puck) {
+	switch (type) {
+		case invisible:
+			SDL_DestroyTexture(_puck);
+			//_dst.h = _dst.w = SIZE_PUCK;
+			//_dst.x = puck.x;
+			//_dst.y = puck.y;
+			_puck = IMG_LoadTexture(_rend, "res/ball_invisible.png");
+			if (!_puck)
+			{
+				std::cerr << "IMG error: " << IMG_GetError() << std::endl;
+				exit(2);
+			}
+			SDL_RenderCopy(_rend, _puck, &_src, &_dst);
+			break;
+		case none:
+			SDL_DestroyTexture(_puck);
+			//_dst.h = _dst.w = SIZE_PUCK;
+			//_dst.x = puck.x;
+			//_dst.y = puck.y;
+			_puck = IMG_LoadTexture(_rend, "res/ball.png");
+			if (!_puck)
+			{
+				std::cerr << "IMG error: " << IMG_GetError() << std::endl;
+				exit(2);
+			}
+			//SDL_RenderCopy(_rend, _puck, &_src, &_dst);
+			break;
+		default:
+			break;
 	}
 }
 
@@ -302,6 +346,9 @@ void GUI_SDL::play_sound(Collision s)
 		Mix_PlayChannel(-1, _board, 0);
 	else if (s == hit)
 		Mix_PlayChannel(-1, _hit, 0);
+	else if (s == item) {
+		Mix_PlayChannel(-1, _buff, 0);
+	}
 	else {
 		Mix_PlayChannel(-1, _goal, 0);
 		SDL_Delay(300);
@@ -321,6 +368,7 @@ GUI_SDL::~GUI_SDL()
 	Mix_FreeChunk(_board);
 	Mix_FreeChunk(_hit);
 	Mix_FreeChunk(_goal);
+	Mix_FreeChunk(_buff);
 	SDL_DestroyRenderer(_rend);
 	SDL_DestroyWindow(_win);
 	Mix_CloseAudio();

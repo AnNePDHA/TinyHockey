@@ -22,8 +22,9 @@ private:
 	void execute_item(Item type, piece& puck);
 	std::unique_ptr<GUI_SDL> _lib;
 	std::vector<piece> _pieces;
-	bool _hard = false, _play = false, _mute = false;
-	Uint32 _startItemTime = 0, _coolDownTime = 0;
+	bool _hard = false, _play = false, _mute = false, _effectStart = false;
+	Uint32 _startItemTime = 0, _coolDownTime = 0, _effectDuration = -1;
+	Item _puckStatus = none;
 	Event_en _event;
 
 };

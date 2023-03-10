@@ -32,7 +32,7 @@ public:
 	bool change_noise();
 	void play_sound(Collision s);
 	void getItemTexture(const piece& item);
-	void set_itemType(Item type);
+	void executeEffect(Item type, const piece& puck);
 
 private:
 	
@@ -51,5 +51,5 @@ private:
 	SDL_Color _color;
 	SDL_Rect _src, _dst;
 	Mix_Music *_music;
-	Mix_Chunk *_board, *_hit, *_goal;
+	Mix_Chunk *_board, *_hit, *_goal, *_buff;
 };

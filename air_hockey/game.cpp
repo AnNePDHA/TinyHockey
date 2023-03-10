@@ -23,7 +23,10 @@ void AirHockey::begin_pos()
 	extrudeCount = 0;
 	_startItemTime = SDL_GetTicks();
 	_coolDownTime = SDL_GetTicks();
-
+	_effectStart = false;
+	_effectDuration = 0;
+	_puckStatus = none;
+	_lib->executeEffect(none, _pieces[2]);
 }
 
 void AirHockey::hit_puck(type_piece type)
@@ -123,16 +126,29 @@ void AirHockey::behav_puck()
 }
 
 void AirHockey::behav_item(piece& puck) {
+	if (SDL_GetTicks() - _effectDuration > 5000) {
+		_puckStatus = none;
+		_lib->executeEffect(none, puck);
+	}
+
 	piece& item = _pieces[titem];
 	if (item.score == 0) {
 		return;
 	}
-	if (pow(SIZE_PUCK, 2) >= pow(item.x - puck.x, 2) + pow(item.y - puck.y, 2)) {
+	double d = pow((SIZE_PUCK + SIZE_ITEM) / 2, 2);
+	double X = item.x - puck.x;
+	if (puck.x < item.x) {
+		X += SIZE_PUCK;
+	}
+	double Y = item.y - puck.y;
+	if (puck.y < item.y) {
+		Y += SIZE_PUCK;
+	}
+	if (d > pow(X, 2) + pow(Y, 2)) {
 		execute_item((Item)(item.score), puck);
 		item.score = 0;
 		_coolDownTime = SDL_GetTicks();
 	}
-
 }
 
 void AirHockey::execute_item(Item type, piece& puck) {
@@ -148,9 +164,22 @@ void AirHockey::execute_item(Item type, piece& puck) {
 		case stop:
 			puck.xs = 0;
 			puck.ys = 0;
+			break;
+		case invisible:
+			puck.xs *= 0.95;
+			puck.ys *= 0.95;
+			_effectDuration = SDL_GetTicks();
+			break;
+		case turn:
+			puck.xs *= (rand() % 2) == 0 ? 1.25 : -1.25;
+			puck.ys *= (rand() % 2) == 0 ? 1.25 : -1.25;
+			break;
 		default:
 			break;
 	}
+	_puckStatus = type;
+	_lib->play_sound(item);
+	_lib->executeEffect(type, puck);
 }
 
 void AirHockey::extrude()
@@ -229,9 +258,15 @@ void AirHockey::behav_bot()
 	//predict position (coordinates) puck
 	double preX = puck.x + puck.xs, preY = puck.y + puck.ys;
 	double distance, distY;
+	
+	if (_puckStatus == invisible) {
+		//preX *= (((double)rand() / (double)RAND_MAX)) * (rand() % (1000 - 0 + 1) -500);
+		//preY *= (((double)rand() / (double)RAND_MAX)) * (rand() % (1000 - 0 + 1));
+	}
 
 	distance = abs(preX - bot.x);
 	distY = preY - bot.y;
+
 	bot.xs = (speed < distance ? speed : distance) * (preX < bot.x ? -1 : 1);
 	if (preY > HEIGHT / 2)
 		bot.ys -= (bot.y - speed > 75 ? speed : 0);
@@ -269,7 +304,7 @@ void AirHockey::spawn_item() {
 			int minY = 5;
 			int maxY = HEIGHT - SIZE_ITEM - 5;
 			int minScore = 1;
-			int maxScore = 3;
+			int maxScore = 5;
 			_pieces[3].score = rand() % (maxScore - minScore + 1) + minScore;
 			_pieces[3].x = rand() % (maxX - minX + 1) + minX;
 			_pieces[3].y = rand() % (maxY - minY + 1) + minY;
@@ -282,6 +317,7 @@ void AirHockey::spawn_item() {
 	else if (_pieces[3].score != 0 && SDL_GetTicks() - _startItemTime > 5000) {
 			//cout << "Start CD" << endl;
 			_pieces[3].score = 0;
+			//_lib->executeEffect(none, _pieces[2]);
 			_coolDownTime = SDL_GetTicks();
 	}
 }
