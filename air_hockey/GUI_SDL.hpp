@@ -46,7 +46,7 @@ private:
 	SDL_Window *_win;
 	SDL_Renderer *_rend;
 	SDL_Surface *_ttf;
-	SDL_Texture *_background, *_bat, *_puck, *_text, *_dynamic, *_item;
+	SDL_Texture *_background, *_bat, *_batOther, *_puck, *_text, *_dynamic, *_item;
 	TTF_Font *_font;
 	SDL_Color _color;
 	SDL_Rect _src, _dst;

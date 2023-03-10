@@ -67,6 +67,12 @@ void GUI_SDL::load_img()
 		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
 		exit(2);
 	}
+	_batOther = IMG_LoadTexture(_rend, "res/playerBlue.png");
+	if (!_batOther)
+	{
+		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
+		exit(2);
+	}
 }
 
 void GUI_SDL::load_sound()
@@ -198,11 +204,12 @@ void GUI_SDL::draw(const std::vector<piece> & pieces)
 	_dst.h = _dst.w = SIZE_BAT;
 	_dst.x = pieces[0].x;
 	_dst.y = pieces[0].y;
+
 	SDL_RenderCopy(_rend, _bat, &_src, &_dst);
 
 	_dst.x = pieces[1].x;
 	_dst.y = pieces[1].y;
-	SDL_RenderCopy(_rend, _bat, &_src, &_dst);
+	SDL_RenderCopy(_rend, _batOther, &_src, &_dst);
 
 	draw_item(pieces[3]);
 	draw_dynamic();
@@ -360,6 +367,7 @@ GUI_SDL::~GUI_SDL()
 	SDL_DestroyTexture(_background);
 	SDL_DestroyTexture(_puck);
 	SDL_DestroyTexture(_bat);
+	SDL_DestroyTexture(_batOther);
 	SDL_DestroyTexture(_dynamic);
 	SDL_DestroyTexture(_text);
 	SDL_DestroyTexture(_item);
