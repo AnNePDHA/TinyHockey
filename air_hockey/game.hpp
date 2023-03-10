@@ -5,6 +5,7 @@
 class AirHockey
 {
 public:
+	int extrudeCount;
 	AirHockey();
 	~AirHockey();
 	void start();

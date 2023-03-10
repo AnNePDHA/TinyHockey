@@ -1,4 +1,6 @@
 ﻿#include "game.hpp"
+#include <iostream>
+using namespace std;
 
 AirHockey::AirHockey() : _lib(new GUI_SDL)
 {
@@ -120,18 +122,26 @@ void AirHockey::extrude()
 
 	while (true)
 	{
+		extrudeCount++;
 		if (d > pow(bot.x - puck.x, 2) + pow(bot.y - puck.y, 2))
 		{
 			bot.x -= bot.xs * 0.1;
 			bot.y -= bot.ys * 0.1;
+			//cout << "Bit"<< endl;
 		}
 		else if (d > pow(player.x - puck.x, 2) + pow(player.y - puck.y, 2))
 		{
 			player.x -= player.xs * 0.1;
 			player.y -= player.ys * 0.1;
+			//cout << "Bat" << endl;
 		}
 		else
 			break;
+
+		if (extrudeCount > 50) {
+			extrudeCount = 0;
+			return;
+		}
 	}
 }
 
@@ -207,7 +217,7 @@ void AirHockey::behav_bot()
 void AirHockey::start()
 {
 	_lib->new_game(_hard);
-
+	extrudeCount = 0;
 	while (true)
 	{
 		_event = _lib->checkEvent(_pieces[1]);

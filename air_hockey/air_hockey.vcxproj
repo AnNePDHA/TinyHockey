@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Codes\vclib\SDL2_mixer-devel-2.6.3-VC\SDL2_mixer-2.6.3\include;D:\Codes\vclib\SDL2_image-devel-2.6.3-VC\SDL2_image-2.6.3\include;D:\Codes\vclib\SDL2_ttf-devel-2.20.2-VC\SDL2_ttf-2.20.2\include;C:\Users\HP\Downloads\SDL_mixer-devel-1.2.7-VC6\SDL_mixer-1.2.7\include;D:\Codes\vclib\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Codes\vclib\SDL2_mixer-devel-2.6.3-VC\SDL2_mixer-2.6.3\lib\x64;D:\Codes\vclib\SDL2_image-devel-2.6.3-VC\SDL2_image-2.6.3\lib\x64;D:\Codes\vclib\SDL2_ttf-devel-2.20.2-VC\SDL2_ttf-2.20.2\lib\x64;C:\Users\HP\Downloads\SDL_mixer-devel-1.2.7-VC6\SDL_mixer-1.2.7\lib;D:\Codes\vclib\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Codes\vclib\SDL2_mixer-devel-2.6.3-VC\SDL2_mixer-2.6.3\include;D:\Codes\vclib\SDL2_image-devel-2.6.3-VC\SDL2_image-2.6.3\include;D:\Codes\vclib\SDL2_ttf-devel-2.20.2-VC\SDL2_ttf-2.20.2\include;C:\Users\HP\Downloads\SDL_mixer-devel-1.2.7-VC6\SDL_mixer-1.2.7\include;D:\Codes\vclib\include;C:\Custom VS Extension\SDL2-2.26.3\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Codes\vclib\SDL2_mixer-devel-2.6.3-VC\SDL2_mixer-2.6.3\lib\x64;D:\Codes\vclib\SDL2_image-devel-2.6.3-VC\SDL2_image-2.6.3\lib\x64;D:\Codes\vclib\SDL2_ttf-devel-2.20.2-VC\SDL2_ttf-2.20.2\lib\x64;C:\Users\HP\Downloads\SDL_mixer-devel-1.2.7-VC6\SDL_mixer-1.2.7\lib;D:\Codes\vclib\lib\x64;C:\Custom VS Extension\SDL2-2.26.3\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -95,7 +95,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
