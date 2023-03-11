@@ -73,6 +73,17 @@ void AirHockey::hit_puck(type_piece type)
 		_lib->play_sound(hit);
 }
 
+void AirHockey::behav_pl() {
+	piece& pl = _pieces[tplayer];
+	pl.xs = MAX_SPEED;
+	pl.ys = MAX_SPEED;
+	if (abs(pl.xs) > MAX_SPEED && abs(pl.ys) > MAX_SPEED)
+	{
+		pl.xs = 0;
+		pl.ys = 0;
+	}
+};
+
 void AirHockey::behav_puck()
 {
 	piece& puck = _pieces[tpuck];
@@ -258,7 +269,7 @@ void AirHockey::behav_bot()
 	//predict position (coordinates) puck
 	double preX = puck.x + puck.xs, preY = puck.y + puck.ys;
 	double distance, distY;
-	
+
 	if (_puckStatus == invisible) {
 		//preX *= (((double)rand() / (double)RAND_MAX)) * (rand() % (1000 - 0 + 1) -500);
 		//preY *= (((double)rand() / (double)RAND_MAX)) * (rand() % (1000 - 0 + 1));
@@ -288,7 +299,6 @@ void AirHockey::behav_bot()
 
 	confines(tbot);
 }
-
 void AirHockey::spawn_item() {
 	if (_pieces[3].score == 0 && SDL_GetTicks() - _coolDownTime < 1000) {
 		//cout << "CD" << endl;
@@ -327,7 +337,7 @@ void AirHockey::start()
 	_lib->new_game(_hard);
 	while (true)
 	{
-		_event = _lib->checkEvent(_pieces[1]);
+		_event = _lib->checkEvent(_pieces[1], _pieces[0], _hard);
 		switch (_event)
 		{
 		case nothing:
@@ -369,6 +379,7 @@ void AirHockey::start()
 			behav_bot();
 			confines(tplayer);
 			behav_puck();
+			behav_pl();
 			_lib->draw(_pieces);
 		}
 	}

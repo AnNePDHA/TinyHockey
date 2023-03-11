@@ -17,7 +17,7 @@
 #define BLACK_COLOR 0,0,0
 #define RED_COLOR 255,0,0
 #define BLUE_COLOR 0,0,255
-#define MAX_SPEED SIZE_PUCK / 2
+#define MAX_SPEED SIZE_PUCK/2
 #define BOOT_SP 6
 
 class GUI_SDL
@@ -27,7 +27,7 @@ public:
 	~GUI_SDL();
 
 	void new_game(bool hard);
-	Event_en checkEvent(piece & pl) const;
+	Event_en checkEvent(piece & pl, piece & plR, bool _hard) const;
 	void draw(const std::vector<piece> & pieces);
 	bool change_noise();
 	void play_sound(Collision s);

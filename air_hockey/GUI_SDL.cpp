@@ -116,7 +116,7 @@ void GUI_SDL::load_sound()
 	Mix_PlayMusic(_music, -1);
 }
 
-Event_en GUI_SDL::checkEvent(piece & pl) const
+Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard) const
 {
 	SDL_Event event;
 
@@ -130,28 +130,109 @@ Event_en GUI_SDL::checkEvent(piece & pl) const
 		{
 			switch (event.key.keysym.sym)
 			{
-			case SDLK_RIGHT:
-			case SDLK_LEFT:
-				return dific;
+
+			//case SDLK_LEFT:
+				//return dific;
+
 			case SDLK_q:
 				return esc;
+
 			case SDLK_ESCAPE:
 				return menu;
+
 			case SDLK_KP_ENTER:
+
 			case SDLK_RETURN:
 				return play;
+
 			case SDLK_m:
 				return mus;
+
+			case SDLK_w:
+				if (_hard == false) {
+					plR.xp = plR.x;
+					plR.yp = plR.y;
+					plR.y = plR.y - plR.ys;
+					std::cout << plR.ys << " ";
+					plR.xs *= 1.2;
+					plR.ys *= 1.2;
+				}
+				break;
+
+			case SDLK_s:
+				if (_hard == false) {
+					plR.xp = plR.x;
+					plR.yp = plR.y;
+					plR.y = plR.y + plR.ys;
+					plR.xs *= 1.2;
+					plR.ys *= 1.2;
+				}
+				break;
+
+			case SDLK_a:
+				if (_hard == false) {
+					plR.xp = plR.x;
+					plR.yp = plR.y;
+					plR.x = plR.x - plR.xs;
+					plR.xs *= 1.2;
+					plR.ys *= 1.2;
+				}
+				break;
+
+			case SDLK_d:
+				if (_hard == false) {
+					plR.xp = plR.x;
+					plR.yp = plR.y;
+					plR.x = plR.x + plR.xs;
+					plR.xs *= 1.2;
+					plR.ys *= 1.2;
+				}
+				break;
+
+			case SDLK_UP:
+				pl.xp = pl.x;
+				pl.yp = pl.y;
+				pl.y = pl.y - pl.ys;
+				pl.xs *= 1.2;
+				pl.ys *= 1.2;
+				break;
+
+			case SDLK_DOWN:
+				pl.xp = pl.x;
+				pl.yp = pl.y;
+				pl.y = pl.y + pl.ys;
+				pl.xs *= 1.2;
+				pl.ys *= 1.2;
+				break;
+
+			case SDLK_LEFT:
+				pl.xp = pl.x;
+				pl.yp = pl.y;
+				pl.x = pl.x - pl.xs;
+				pl.xs *= 1.2;
+				pl.ys *= 1.2;
+				break;
+
+			case SDLK_RIGHT:
+				pl.xp = pl.x;
+				pl.yp = pl.y;
+				pl.x = pl.x + pl.xs;
+				pl.xs *= 1.2;
+				pl.ys *= 1.2;
+				break;
 			}
+
+
 		}
-		case SDL_MOUSEMOTION:
-		{
-			pl.xp = pl.x;
-			pl.yp = pl.y;
-			pl.x = event.motion.x - SIZE_BAT / 2;
-			pl.y = event.motion.y - SIZE_BAT / 2;
-			break;
-		}
+		//case SDL_MOUSEMOTION:
+		//{
+			//pl.xp = pl.x;
+			//pl.yp = pl.y;
+			//pl.x = event.motion.x - SIZE_BAT / 2;
+			//pl.y = event.motion.y - SIZE_BAT / 2;
+			//break;
+		//}//
+
 		case SDL_MOUSEBUTTONUP:
 		{
 			if (event.button.button == SDL_BUTTON_LEFT)
