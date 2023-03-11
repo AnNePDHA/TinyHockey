@@ -73,8 +73,8 @@ void AirHockey::hit_puck(type_piece type)
 		_lib->play_sound(hit);
 }
 
-void AirHockey::behav_pl() {
-	piece& pl = _pieces[tplayer];
+void AirHockey::behav_pl(type_piece type) {
+	piece& pl = _pieces[type];
 	pl.xs = MAX_SPEED;
 	pl.ys = MAX_SPEED;
 	if (abs(pl.xs) > MAX_SPEED && abs(pl.ys) > MAX_SPEED)
@@ -163,6 +163,7 @@ void AirHockey::behav_item(piece& puck) {
 }
 
 void AirHockey::execute_item(Item type, piece& puck) {
+	double a, b;
 	switch (type) {
 		case speedUp:
 			puck.xs *= 2;
@@ -182,8 +183,14 @@ void AirHockey::execute_item(Item type, piece& puck) {
 			_effectDuration = SDL_GetTicks();
 			break;
 		case turn:
-			puck.xs *= (rand() % 2) == 0 ? 1.25 : -1.25;
-			puck.ys *= (rand() % 2) == 0 ? 1.25 : -1.25;
+			a = (rand() % 2) == 0 ? 1.25 : -1.25;
+			b = (rand() % 2) == 0 ? 1.25 : -1.25;
+			while (a == 1.25 && b == 1.25) {
+				a = (rand() % 2) == 0 ? 1.25 : -1.25;
+				b = (rand() % 2) == 0 ? 1.25 : -1.25;
+			}
+			puck.xs *= a;
+			puck.ys *= b;
 			break;
 		default:
 			break;
@@ -307,7 +314,7 @@ void AirHockey::spawn_item() {
 	else if(_pieces[3].score == 0){
 		//cout << "Check rand" << endl;
 		double val = (double)rand() / RAND_MAX;
-		if (val < 0.25) {
+		if (val < 0.35) {
 			//cout << "Check rand2" << endl;
 			int minX = 5;
 			int maxX = WIDTH - SIZE_ITEM - 5;
@@ -376,10 +383,18 @@ void AirHockey::start()
 		if (_play)
 		{
 			spawn_item();
-			behav_bot();
+			if (_hard) {
+				behav_bot();
+			}
+			else {
+				confines(tbot);
+			}
 			confines(tplayer);
 			behav_puck();
-			behav_pl();
+			if (!_hard) {
+				behav_pl(tbot);
+			}
+			behav_pl(tplayer);
 			_lib->draw(_pieces);
 		}
 	}

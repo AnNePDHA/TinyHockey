@@ -14,7 +14,7 @@ private:
 	void begin_pos();
 	void behav_bot();
 	void behav_puck();
-	void behav_pl();
+	void behav_pl(type_piece type);
 	void hit_puck(type_piece type);
 	void confines(type_piece type);
 	void extrude();
