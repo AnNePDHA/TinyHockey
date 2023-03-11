@@ -152,6 +152,7 @@ void AirHockey::behav_item(piece& puck) {
 }
 
 void AirHockey::execute_item(Item type, piece& puck) {
+	float a, b;
 	switch (type) {
 		case speedUp:
 			puck.xs *= 2;
@@ -171,8 +172,14 @@ void AirHockey::execute_item(Item type, piece& puck) {
 			_effectDuration = SDL_GetTicks();
 			break;
 		case turn:
-			puck.xs *= (rand() % 2) == 0 ? 1.25 : -1.25;
-			puck.ys *= (rand() % 2) == 0 ? 1.25 : -1.25;
+			a = (rand() % 2) == 0 ? 1.25 : -1.25;
+			b = (rand() % 2) == 0 ? 1.25 : -1.25;
+			while (a == 1.25 && b == 1.25) {
+				a = (rand() % 2) == 0 ? 1.25 : -1.25;
+				b = (rand() % 2) == 0 ? 1.25 : -1.25;
+			}
+			puck.xs *= a;
+			puck.ys *= b;
 			break;
 		default:
 			break;
@@ -297,7 +304,7 @@ void AirHockey::spawn_item() {
 	else if(_pieces[3].score == 0){
 		//cout << "Check rand" << endl;
 		double val = (double)rand() / RAND_MAX;
-		if (val < 0.25) {
+		if (val < 0.35) {
 			//cout << "Check rand2" << endl;
 			int minX = 5;
 			int maxX = WIDTH - SIZE_ITEM - 5;
