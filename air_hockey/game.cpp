@@ -106,6 +106,10 @@ void AirHockey::behav_puck()
 			_lib->draw(_pieces);
 			_lib->play_sound(goal);
 			begin_pos();
+			if (_pieces[0].score == SCORE_TO_WIN || _pieces[1].score == SCORE_TO_WIN) {
+				_play = false;
+				_end = true;
+			}
 			return;
 		}
 		puck.y = (puck.y > hei ? hei * 2 - puck.y : 4 - puck.y);
@@ -334,7 +338,7 @@ void AirHockey::start()
 	_lib->new_game(_hard);
 	while (true)
 	{
-		_event = _lib->checkEvent(_pieces[1]);
+		_event = _lib->checkEvent(_pieces[1], _end);
 		switch (_event)
 		{
 		case nothing:
@@ -342,14 +346,14 @@ void AirHockey::start()
 		case esc:
 			return;
 		case play:
-			if (!_play)
+			if (!_play && !_end)
 			{
 				_play = true;
 				begin_pos();
 			}
 			break;
 		case dific:
-			if (!_play)
+			if (!_play && !_end)
 			{
 				_hard = !_hard;
 				_lib->new_game(_hard);
@@ -357,12 +361,13 @@ void AirHockey::start()
 			break;
 		case mus:
 			_mute = _lib->change_noise();
-			if (!_play)
+			if (!_play && !_end)
 				_lib->new_game(_hard);
 			break;
 		case menu:
-			if (_play)
+			if (_play || _end)
 			{
+				_end = false;
 				_play = false;
 				_pieces[0].score = 0;
 				_pieces[1].score = 0;
@@ -377,6 +382,9 @@ void AirHockey::start()
 			confines(tplayer);
 			behav_puck();
 			_lib->draw(_pieces);
+		}
+		else if (_end){
+			_lib->end_game(_pieces);
 		}
 	}
 }
