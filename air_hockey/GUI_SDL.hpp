@@ -19,6 +19,7 @@
 #define BLUE_COLOR 0,0,255
 #define MAX_SPEED SIZE_PUCK/2
 #define BOOT_SP 6
+#define SCORE_TO_WIN 15
 
 class GUI_SDL
 {
@@ -27,7 +28,8 @@ public:
 	~GUI_SDL();
 
 	void new_game(bool hard);
-	Event_en checkEvent(piece & pl, piece & plR, bool _hard) const;
+	Event_en checkEvent(piece & pl, piece & plR, bool _hard, bool end) const;
+	void end_game(const std::vector<piece>& pieces);
 	void draw(const std::vector<piece> & pieces);
 	bool change_noise();
 	void play_sound(Collision s);
@@ -45,7 +47,7 @@ private:
 	bool _noise = true;
 	SDL_Window *_win;
 	SDL_Renderer *_rend;
-	SDL_Surface *_ttf;
+	SDL_Surface *_ttf, *_tff;
 	SDL_Texture *_background, *_bat, *_batOther, *_puck, *_text, *_dynamic, *_item;
 	TTF_Font *_font;
 	SDL_Color _color;

@@ -117,6 +117,10 @@ void AirHockey::behav_puck()
 			_lib->draw(_pieces);
 			_lib->play_sound(goal);
 			begin_pos();
+			if (_pieces[0].score == SCORE_TO_WIN || _pieces[1].score == SCORE_TO_WIN) {
+				_play = false;
+				_end = true;
+			}
 			return;
 		}
 		puck.y = (puck.y > hei ? hei * 2 - puck.y : 4 - puck.y);
@@ -163,6 +167,7 @@ void AirHockey::behav_item(piece& puck) {
 }
 
 void AirHockey::execute_item(Item type, piece& puck) {
+	float a, b;
 	switch (type) {
 		case speedUp:
 			puck.xs *= 2;
@@ -182,8 +187,14 @@ void AirHockey::execute_item(Item type, piece& puck) {
 			_effectDuration = SDL_GetTicks();
 			break;
 		case turn:
-			puck.xs *= (rand() % 2) == 0 ? 1.25 : -1.25;
-			puck.ys *= (rand() % 2) == 0 ? 1.25 : -1.25;
+			a = (rand() % 2) == 0 ? 1.25 : -1.25;
+			b = (rand() % 2) == 0 ? 1.25 : -1.25;
+			while (a == 1.25 && b == 1.25) {
+				a = (rand() % 2) == 0 ? 1.25 : -1.25;
+				b = (rand() % 2) == 0 ? 1.25 : -1.25;
+			}
+			puck.xs *= a;
+			puck.ys *= b;
 			break;
 		default:
 			break;
@@ -307,7 +318,7 @@ void AirHockey::spawn_item() {
 	else if(_pieces[3].score == 0){
 		//cout << "Check rand" << endl;
 		double val = (double)rand() / RAND_MAX;
-		if (val < 0.25) {
+		if (val < 0.35) {
 			//cout << "Check rand2" << endl;
 			int minX = 5;
 			int maxX = WIDTH - SIZE_ITEM - 5;
@@ -337,7 +348,7 @@ void AirHockey::start()
 	_lib->new_game(_hard);
 	while (true)
 	{
-		_event = _lib->checkEvent(_pieces[1], _pieces[0], _hard);
+		_event = _lib->checkEvent(_pieces[1], _pieces[0], _hard,  _end);
 		switch (_event)
 		{
 		case nothing:
@@ -345,14 +356,14 @@ void AirHockey::start()
 		case esc:
 			return;
 		case play:
-			if (!_play)
+			if (!_play && !_end)
 			{
 				_play = true;
 				begin_pos();
 			}
 			break;
 		case dific:
-			if (!_play)
+			if (!_play && !_end)
 			{
 				_hard = !_hard;
 				_lib->new_game(_hard);
@@ -360,12 +371,13 @@ void AirHockey::start()
 			break;
 		case mus:
 			_mute = _lib->change_noise();
-			if (!_play)
+			if (!_play && !_end)
 				_lib->new_game(_hard);
 			break;
 		case menu:
-			if (_play)
+			if (_play || _end)
 			{
+				_end = false;
 				_play = false;
 				_pieces[0].score = 0;
 				_pieces[1].score = 0;
@@ -381,6 +393,9 @@ void AirHockey::start()
 			behav_puck();
 			behav_pl();
 			_lib->draw(_pieces);
+		}
+		else if (_end){
+			_lib->end_game(_pieces);
 		}
 	}
 }

@@ -116,7 +116,7 @@ void GUI_SDL::load_sound()
 	Mix_PlayMusic(_music, -1);
 }
 
-Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard) const
+Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard, bool end) const
 {
 	SDL_Event event;
 
@@ -237,6 +237,11 @@ Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard) const
 		{
 			if (event.button.button == SDL_BUTTON_LEFT)
 			{
+				if (end) {
+					if (event.button.y > HEIGHT / 2 - 100 && event.button.y < HEIGHT / 2 + 100
+						&& event.button.x > WIDTH / 2 - 100 && event.button.x < WIDTH / 2 + 100)
+						return menu;
+				}
 				if (event.button.y > HEIGHT / 2 - 30 && event.button.y < HEIGHT / 2 + 30)
 					return dific;
 				if (event.button.y > HEIGHT / 2 + 70 && event.button.y < HEIGHT / 2 + 115
@@ -321,6 +326,78 @@ void GUI_SDL::new_game(bool hard)
 		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
 		exit(2);
 	}
+}
+
+void GUI_SDL::end_game(const std::vector<piece>& pieces) {
+	//SDL_DestroyTexture(_background);
+	SDL_RenderClear(_rend);
+	SDL_RenderCopy(_rend, _background, NULL, NULL);
+	_background = IMG_LoadTexture(_rend, "res/background.png");
+	if (!_background)
+	{
+		std::cerr << "IMG error: " << IMG_GetError() << std::endl;
+		exit(2);
+	}
+
+	_dst.w = 100;
+	_dst.h = 100;
+	_dst.x = (WIDTH - SIZE_BAT - _dst.w / 2) / 2;
+	_dst.y = (HEIGHT - SIZE_BAT - _dst.h / 2) / 4;
+	if (pieces[0].score > pieces[1].score) {
+		_ttf = TTF_RenderText_Solid(_font, "WIN", { BLUE_COLOR });
+		_text = SDL_CreateTextureFromSurface(_rend, _ttf);
+		SDL_RenderCopy(_rend, _text, 0, &_dst);
+		SDL_FreeSurface(_ttf);
+		SDL_DestroyTexture(_text);
+
+		_tff = TTF_RenderText_Solid(_font, "LOSE", { RED_COLOR });
+	}
+	else {
+		_ttf = TTF_RenderText_Solid(_font, "LOSE", { RED_COLOR });
+		_text = SDL_CreateTextureFromSurface(_rend, _ttf);
+		SDL_RenderCopy(_rend, _text, 0, &_dst);
+		SDL_FreeSurface(_ttf);
+		SDL_DestroyTexture(_text);
+
+		_tff = TTF_RenderText_Solid(_font, "WIN", { BLUE_COLOR });
+	}
+	
+	_dst.y = _dst.y * 3;
+	_text = SDL_CreateTextureFromSurface(_rend, _tff);
+	SDL_RenderCopy(_rend, _text, 0, &_dst);
+	SDL_FreeSurface(_tff);
+	SDL_DestroyTexture(_text);
+
+	_dst.w = 125;
+	_dst.h = 125;
+	_dst.x = (WIDTH - SIZE_BAT - _dst.w / 2) / 2;
+	_dst.y = (HEIGHT - SIZE_BAT - _dst.h / 2) / 2;
+
+	_ttf = TTF_RenderText_Solid(_font, "RETRY", { 255, 255, 255 });
+	_text = SDL_CreateTextureFromSurface(_rend, _ttf);
+	SDL_RenderCopy(_rend, _text, 0, &_dst);
+	SDL_FreeSurface(_ttf);
+	SDL_DestroyTexture(_text);
+
+	_dst.w = 50;
+	_dst.h = 50;
+	_dst.x = (WIDTH - SIZE_BAT) / 2;
+	_dst.y = (HEIGHT - SIZE_BAT - _dst.h / 2) / 4 + 75;
+
+	_ttf = TTF_RenderText_Solid(_font, std::to_string(pieces[0].score).c_str(), { 255, 255, 255 });
+	_text = SDL_CreateTextureFromSurface(_rend, _ttf);
+	SDL_RenderCopy(_rend, _text, 0, &_dst);
+	SDL_FreeSurface(_ttf);
+	SDL_DestroyTexture(_text);
+
+	_dst.y = _dst.y * 3 - 75*2;
+	_ttf = TTF_RenderText_Solid(_font, std::to_string(pieces[1].score).c_str(), { 255, 255, 255 });
+	_text = SDL_CreateTextureFromSurface(_rend, _ttf);
+	SDL_RenderCopy(_rend, _text, 0, &_dst);
+	SDL_FreeSurface(_ttf);
+	SDL_DestroyTexture(_text);
+
+	SDL_RenderPresent(_rend);
 }
 
 bool GUI_SDL::change_noise()
