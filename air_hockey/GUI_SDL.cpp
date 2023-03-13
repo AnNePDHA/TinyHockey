@@ -153,7 +153,7 @@ Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard, bool end) cons
 					plR.xp = plR.x;
 					plR.yp = plR.y;
 					plR.y = plR.y - plR.ys;
-					std::cout << plR.ys << " ";
+					std::cout << plR.ys << " " << plR.xs;
 					plR.xs *= 1.2;
 					plR.ys *= 1.2;
 				}

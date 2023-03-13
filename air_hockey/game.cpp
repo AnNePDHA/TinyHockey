@@ -73,15 +73,15 @@ void AirHockey::hit_puck(type_piece type)
 		_lib->play_sound(hit);
 }
 
-void AirHockey::behav_pl() {
-	piece& pl = _pieces[tplayer];
+void AirHockey::behav_pl(type_piece type) {
+	piece& pl = _pieces[type];
 	pl.xs = MAX_SPEED;
 	pl.ys = MAX_SPEED;
-	if (abs(pl.xs) > MAX_SPEED && abs(pl.ys) > MAX_SPEED)
-	{
-		pl.xs = 0;
-		pl.ys = 0;
-	}
+	///if (abs(pl.xs) > MAX_SPEED && abs(pl.ys) > MAX_SPEED)
+	//{
+		//pl.xs = 0;
+		//pl.ys = 0;
+	//}
 };
 
 void AirHockey::behav_puck()
@@ -167,7 +167,7 @@ void AirHockey::behav_item(piece& puck) {
 }
 
 void AirHockey::execute_item(Item type, piece& puck) {
-	float a, b;
+	double a, b;
 	switch (type) {
 		case speedUp:
 			puck.xs *= 2;
@@ -388,10 +388,18 @@ void AirHockey::start()
 		if (_play)
 		{
 			spawn_item();
-			behav_bot();
+			if (_hard) {
+				behav_bot();
+			}
+			else {
+				confines(tbot);
+			}
 			confines(tplayer);
 			behav_puck();
-			behav_pl();
+			if (!_hard) {
+				behav_pl(tbot);
+			}
+			behav_pl(tplayer);
 			_lib->draw(_pieces);
 		}
 		else if (_end){
