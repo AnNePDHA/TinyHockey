@@ -82,7 +82,7 @@ void AirHockey::behav_pl(type_piece type) {
 		//pl.xs = 0;
 		//pl.ys = 0;
 	//}
-};
+}
 
 void AirHockey::behav_puck()
 {
