@@ -17,7 +17,7 @@
 #define BLACK_COLOR 0,0,0
 #define RED_COLOR 255,0,0
 #define BLUE_COLOR 0,0,255
-#define MAX_SPEED SIZE_PUCK/2
+#define MAX_SPEED SIZE_PUCK/4
 #define BOOT_SP 6
 #define SCORE_TO_WIN 15
 

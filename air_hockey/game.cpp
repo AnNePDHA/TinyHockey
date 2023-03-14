@@ -82,7 +82,7 @@ void AirHockey::behav_pl(type_piece type) {
 		//pl.xs = 0;
 		//pl.ys = 0;
 	//}
-};
+}
 
 void AirHockey::behav_puck()
 {
@@ -272,7 +272,7 @@ void AirHockey::behav_bot()
 {
 	piece& bot = _pieces[tbot];
 	piece& puck = _pieces[tpuck];
-	double speed = MAX_SPEED/6;
+	double speed = MAX_SPEED;
 
 	bot.xp = bot.x;
 	bot.yp = bot.y;

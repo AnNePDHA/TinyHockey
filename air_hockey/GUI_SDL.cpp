@@ -116,7 +116,7 @@ void GUI_SDL::load_sound()
 	Mix_PlayMusic(_music, -1);
 }
 
-Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard, bool end) const
+Event_en GUI_SDL::checkEvent(piece& pl, piece& plR, bool _hard, bool end) const
 {
 	SDL_Event event;
 	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
@@ -126,8 +126,8 @@ Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard, bool end) cons
 			plR.yp = plR.y;
 			plR.y = plR.y - plR.ys;
 			std::cout << plR.ys << " " << plR.xs;
-			plR.xs *= 1.2;
-			plR.ys *= 1.2;
+			//plR.xs *= 1.2;
+			//plR.ys *= 1.2;
 		}
 	}
 	if (currentKeyStates[SDL_SCANCODE_LEFT]) {
@@ -135,8 +135,8 @@ Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard, bool end) cons
 			plR.xp = plR.x;
 			plR.yp = plR.y;
 			plR.x = plR.x - plR.xs;
-			plR.xs *= 1.2;
-			plR.ys *= 1.2;
+			//plR.xs *= 1.2;
+			//plR.ys *= 1.2;
 		}
 	}
 	if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
@@ -144,8 +144,8 @@ Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard, bool end) cons
 			plR.xp = plR.x;
 			plR.yp = plR.y;
 			plR.x = plR.x + plR.xs;
-			plR.xs *= 1.2;
-			plR.ys *= 1.2;
+			//plR.xs *= 1.2;
+			//plR.ys *= 1.2;
 		}
 	}
 	if (currentKeyStates[SDL_SCANCODE_DOWN]) {
@@ -153,104 +153,142 @@ Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard, bool end) cons
 			plR.xp = plR.x;
 			plR.yp = plR.y;
 			plR.y = plR.y + plR.ys;
-			plR.xs *= 1.2;
-			plR.ys *= 1.2;
+			//plR.xs *= 1.2;
+			//plR.ys *= 1.2;
 		}
 	}
 
-	if (SDL_PollEvent(&event))
+	const Uint8* state = SDL_GetKeyboardState(NULL);
+
+	if (!_hard) {
+		if (state[SDL_SCANCODE_W]) {
+			plR.xp = plR.x;
+			plR.yp = plR.y;
+			plR.y = plR.y - plR.ys;
+			//std::cout << plR.ys << " " << plR.xs;
+			//plR.xs *= 1.2;
+			//plR.ys *= 1.2;
+		}
+
+		if (state[SDL_SCANCODE_S]) {
+			plR.xp = plR.x;
+			plR.yp = plR.y;
+			plR.y = plR.y + plR.ys;
+			//plR.xs *= 1.2;
+			//plR.ys *= 1.2;
+		}
+
+		if (state[SDL_SCANCODE_A]) {
+			plR.xp = plR.x;
+			plR.yp = plR.y;
+			plR.x = plR.x - plR.xs;
+			//plR.xs *= 1.2;
+			//plR.ys *= 1.2;
+		}
+
+		if (state[SDL_SCANCODE_D]) {
+			plR.xp = plR.x;
+			plR.yp = plR.y;
+			plR.x = plR.x + plR.xs;
+			//plR.xs *= 1.2;
+			//plR.ys *= 1.2;
+		}
+
+	}
+	if (state[SDL_SCANCODE_UP]) {
+		pl.xp = pl.x;
+		pl.yp = pl.y;
+		pl.y = pl.y - pl.ys;
+		//pl.xs *= 1.2;
+		//pl.ys *= 1.2;
+	}
+
+	if (state[SDL_SCANCODE_DOWN]) {
+		pl.xp = pl.x;
+		pl.yp = pl.y;
+		pl.y = pl.y + pl.ys;
+		//pl.xs *= 1.2;
+		//pl.ys *= 1.2;
+	}
+
+	if (state[SDL_SCANCODE_LEFT]) {
+		pl.xp = pl.x;
+		pl.yp = pl.y;
+		pl.x = pl.x - pl.xs;
+		//pl.xs *= 1.2;
+		//pl.ys *= 1.2;
+	}
+
+	if (state[SDL_SCANCODE_RIGHT]) {
+		pl.xp = pl.x;
+		pl.yp = pl.y;
+		pl.x = pl.x + pl.xs;
+		//pl.xs *= 1.2;
+		//pl.ys *= 1.2;
+	}
+
+	while (SDL_PollEvent(&event) != 0)
 	{
 		switch (event.type)
 		{
-		case SDL_QUIT:
-			return esc;
-		case SDL_KEYDOWN:
-		{
-			switch (event.key.keysym.sym)
-			{
-
-			//case SDLK_LEFT:
-				//return dific;
-
-			case SDLK_q:
+			case SDL_QUIT:
 				return esc;
-
-			case SDLK_ESCAPE:
-				return menu;
-
-			case SDLK_KP_ENTER:
-
-			case SDLK_RETURN:
-				return play;
-
-			case SDLK_m:
-				return mus;
-
-			case SDLK_UP:
-				pl.xp = pl.x;
-				pl.yp = pl.y;
-				pl.y = pl.y - pl.ys;
-				pl.xs *= 1.2;
-				pl.ys *= 1.2;
-				break;
-
-			case SDLK_DOWN:
-				pl.xp = pl.x;
-				pl.yp = pl.y;
-				pl.y = pl.y + pl.ys;
-				pl.xs *= 1.2;
-				pl.ys *= 1.2;
-				break;
-
-			case SDLK_LEFT:
-				pl.xp = pl.x;
-				pl.yp = pl.y;
-				pl.x = pl.x - pl.xs;
-				pl.xs *= 1.2;
-				pl.ys *= 1.2;
-				break;
-
-			case SDLK_RIGHT:
-				pl.xp = pl.x;
-				pl.yp = pl.y;
-				pl.x = pl.x + pl.xs;
-				pl.xs *= 1.2;
-				pl.ys *= 1.2;
-				break;
-			}
-
-
-		}
-		//case SDL_MOUSEMOTION:
-		//{
-			//pl.xp = pl.x;
-			//pl.yp = pl.y;
-			//pl.x = event.motion.x - SIZE_BAT / 2;
-			//pl.y = event.motion.y - SIZE_BAT / 2;
-			//break;
-		//}//
-
-		case SDL_MOUSEBUTTONUP:
-		{
-			if (event.button.button == SDL_BUTTON_LEFT)
+			case SDL_KEYDOWN:
 			{
-				if (end) {
-					if (event.button.y > HEIGHT / 2 - 100 && event.button.y < HEIGHT / 2 + 100
-						&& event.button.x > WIDTH / 2 - 100 && event.button.x < WIDTH / 2 + 100)
+				switch (event.key.keysym.sym)
+				{
+
+					//case SDLK_LEFT:
+						//return dific;
+
+					case SDLK_q:
+						return esc;
+
+					case SDLK_ESCAPE:
 						return menu;
+
+					case SDLK_KP_ENTER:
+
+					case SDLK_RETURN:
+						return play;
+
+					case SDLK_m:
+						return mus;
+
 				}
-				if (event.button.y > HEIGHT / 2 - 30 && event.button.y < HEIGHT / 2 + 30)
-					return dific;
-				if (event.button.y > HEIGHT / 2 + 70 && event.button.y < HEIGHT / 2 + 115
-					&& event.button.x > 140 && event.button.x < 340)
-					return play;
-				if (event.button.y > HEIGHT - 54 && event.button.x < 54)
-					return mus;
+
+
 			}
-			if (event.button.button == SDL_BUTTON_RIGHT)
-				return menu;
-			break;
-		}
+			//case SDL_MOUSEMOTION:
+			//{
+				//pl.xp = pl.x;
+				//pl.yp = pl.y;
+				//pl.x = event.motion.x - SIZE_BAT / 2;
+				//pl.y = event.motion.y - SIZE_BAT / 2;
+				//break;
+			//}//
+
+			case SDL_MOUSEBUTTONUP:
+			{
+				if (event.button.button == SDL_BUTTON_LEFT)
+				{
+					if (end) {
+						if (event.button.y > HEIGHT / 2 - 100 && event.button.y < HEIGHT / 2 + 100
+							&& event.button.x > WIDTH / 2 - 100 && event.button.x < WIDTH / 2 + 100)
+							return menu;
+					}
+					if (event.button.y > HEIGHT / 2 - 30 && event.button.y < HEIGHT / 2 + 30)
+						return dific;
+					if (event.button.y > HEIGHT / 2 + 70 && event.button.y < HEIGHT / 2 + 115
+						&& event.button.x > 140 && event.button.x < 340)
+						return play;
+					if (event.button.y > HEIGHT - 54 && event.button.x < 54)
+						return mus;
+				}
+				if (event.button.button == SDL_BUTTON_RIGHT)
+					return menu;
+				break;
+			}
 		}
 	}
 	return nothing;
