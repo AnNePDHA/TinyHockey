@@ -272,7 +272,7 @@ void AirHockey::behav_bot()
 {
 	piece& bot = _pieces[tbot];
 	piece& puck = _pieces[tpuck];
-	double speed = (_hard ? MAX_SPEED / 3 : MAX_SPEED / 6);
+	double speed = MAX_SPEED/6;
 
 	bot.xp = bot.x;
 	bot.yp = bot.y;

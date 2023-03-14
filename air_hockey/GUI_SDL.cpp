@@ -119,6 +119,44 @@ void GUI_SDL::load_sound()
 Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard, bool end) const
 {
 	SDL_Event event;
+	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+	if (currentKeyStates[SDL_SCANCODE_UP]) {
+		if (_hard == false) {
+			plR.xp = plR.x;
+			plR.yp = plR.y;
+			plR.y = plR.y - plR.ys;
+			std::cout << plR.ys << " " << plR.xs;
+			plR.xs *= 1.2;
+			plR.ys *= 1.2;
+		}
+	}
+	if (currentKeyStates[SDL_SCANCODE_LEFT]) {
+		if (_hard == false) {
+			plR.xp = plR.x;
+			plR.yp = plR.y;
+			plR.x = plR.x - plR.xs;
+			plR.xs *= 1.2;
+			plR.ys *= 1.2;
+		}
+	}
+	if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
+		if (_hard == false) {
+			plR.xp = plR.x;
+			plR.yp = plR.y;
+			plR.x = plR.x + plR.xs;
+			plR.xs *= 1.2;
+			plR.ys *= 1.2;
+		}
+	}
+	if (currentKeyStates[SDL_SCANCODE_DOWN]) {
+		if (_hard == false) {
+			plR.xp = plR.x;
+			plR.yp = plR.y;
+			plR.y = plR.y + plR.ys;
+			plR.xs *= 1.2;
+			plR.ys *= 1.2;
+		}
+	}
 
 	if (SDL_PollEvent(&event))
 	{
@@ -147,47 +185,6 @@ Event_en GUI_SDL::checkEvent(piece & pl, piece & plR, bool _hard, bool end) cons
 
 			case SDLK_m:
 				return mus;
-
-			case SDLK_w:
-				if (_hard == false) {
-					plR.xp = plR.x;
-					plR.yp = plR.y;
-					plR.y = plR.y - plR.ys;
-					std::cout << plR.ys << " " << plR.xs;
-					plR.xs *= 1.2;
-					plR.ys *= 1.2;
-				}
-				break;
-
-			case SDLK_s:
-				if (_hard == false) {
-					plR.xp = plR.x;
-					plR.yp = plR.y;
-					plR.y = plR.y + plR.ys;
-					plR.xs *= 1.2;
-					plR.ys *= 1.2;
-				}
-				break;
-
-			case SDLK_a:
-				if (_hard == false) {
-					plR.xp = plR.x;
-					plR.yp = plR.y;
-					plR.x = plR.x - plR.xs;
-					plR.xs *= 1.2;
-					plR.ys *= 1.2;
-				}
-				break;
-
-			case SDLK_d:
-				if (_hard == false) {
-					plR.xp = plR.x;
-					plR.yp = plR.y;
-					plR.x = plR.x + plR.xs;
-					plR.xs *= 1.2;
-					plR.ys *= 1.2;
-				}
-				break;
 
 			case SDLK_UP:
 				pl.xp = pl.x;
